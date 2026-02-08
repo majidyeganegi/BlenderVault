@@ -9,10 +9,12 @@ This project investigates digital form-finding techniques for sustainable
 masonry and 3D-printed vault structures.
 
 ## Features
-- Base points defined by empties
+- Base points defined by "Vertex Groups."
 - Triangulated mesh generation
+- Fan subdivision (rectangular subdivision)
 - Height control
 - Early-stage form-finding logic
+- Color-grading force visualisation
 
 ## Current Status
 Prototype / ongoing research project.
