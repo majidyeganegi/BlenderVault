@@ -1,3 +1,9 @@
+# BlenderVault
+
+BlenderVault is a research-oriented design open-source (free) tool inspired by RhinoVAULT, 
+developed to explore compression-only vaulted structures using form-finding 
+and triangulation-based methods.
+
 ## Table of Contents
 - [Publication](#publication)
 - [Research Motivation](#research-motivation)
@@ -9,12 +15,6 @@
 - [Usage](#usage)
 - [Citation](#citation)
 - [Author](#author)
-
-# BlenderVault
-
-BlenderVault is a research-oriented design open-source (free) tool inspired by RhinoVAULT, 
-developed to explore compression-only vaulted structures using form-finding 
-and triangulation-based methods.
 
 ## Publication:
 https://doi.org/10.5281/zenodo.18547295 (article)
