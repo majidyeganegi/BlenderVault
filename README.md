@@ -1,13 +1,14 @@
 # BlenderVault
 
-BlenderVault is a research-oriented design open-source (free) tool inspired by RhinoVAULT, 
+BlenderVault is a research-oriented, open-source (free) design tool inspired by RhinoVAULT, 
 developed to explore compression-only vaulted structures using form-finding 
-and triangulation-based methods.
+and triangulation-based methods within a Blender-based environment.
 
 ## Table of Contents
 - [Publication](#publication)
 - [Research Motivation](#research-motivation)
 - [Research Context](#research-context)
+- [Scientific Positioning](#scientific-positioning)
 - [Method Overview](#method-overview)
 - [Features](#features)
 - [Current Status](#current-status)
@@ -15,12 +16,18 @@ and triangulation-based methods.
 - [Usage](#usage)
 - [Citation](#citation)
 - [Author](#author)
+- [Links & Resources](#links--resources)
 
-## Publication:
-https://doi.org/10.5281/zenodo.18547295 (article)
+## Publication
+Zenodo (Preprint / Article):  
+https://doi.org/10.5281/zenodo.18547295
 
-This project is part of a broader project to revive arched structures for contemporary/future uses.
-Please have a look at my book: Skybound Structures: https://a.co/d/0gkV4E7F
+This project is part of a broader research trajectory aimed at reviving arched 
+and vaulted structures for contemporary and future applications.
+
+Related book:  
+*Skybound Structures*  
+https://a.co/d/0gkV4E7F
 
 ## Research Motivation
 This project explores compression-only vaulted structures as a sustainable 
@@ -28,58 +35,68 @@ alternative to material-intensive construction systems, with applications
 in low-energy architecture and extraterrestrial habitats.
 
 ## Research Context
-This project investigates digital form-finding techniques for sustainable 
-masonry and 3D-printed vault structures.
+The research investigates digital form-finding techniques for sustainable 
+masonry and additively manufactured (3D-printed) vault structures, bridging 
+architectural design, structural logic, and computational workflows.
 
 ## Scientific Positioning
-This project is inspired by Thrust Network Analysis (TNA) and RhinoVAULT,
-reinterpreted within an open-source Blender environment.
+This project is conceptually inspired by Thrust Network Analysis (TNA) and 
+RhinoVAULT, reinterpreted and extended within an open-source Blender environment 
+to support experimental, design-driven research.
 
 ## Method Overview
-- User-defined base points (empties)
+- User-defined base points (empties / vertex groups)
 - Triangulation-based mesh generation
 - Height-controlled form-finding
-- Early force-density logic (prototype)
+- Early force-density logic (prototype stage)
 
 ## Features
-- Base points defined by "Vertex Groups."
+- Base points defined via **Vertex Groups**
 - Triangulated mesh generation
 - Fan subdivision (rectangular subdivision)
-- Height control
+- Global height control
 - Early-stage form-finding logic
-- Color-grading force visualisation
+- Color-graded force visualization
 
 ## Current Status
-Prototype / ongoing research project.(started in 2022)
+Prototype / ongoing research project (initiated in 2022).
 
 ## Future Research Directions
-- Integration of structural analysis
-- Optimization under material constraints
-- Robotic fabrication workflows
-- Application to lunar and Martian habitats
+- Integration of structural analysis and feedback
+- Optimization under material and fabrication constraints
+- Robotic and digital fabrication workflows
+- Application to lunar and Martian habitat systems
+
+## Usage
+1. Download the BlenderVault add-on and save it on your computer (Windows only at the moment).
+2. In Blender, go to **Edit → Preferences → Add-ons → Install from Disk**.
+3. Install the add-on.
+4. Press **N** in the 3D Viewport; *Folding Vault II* appears in the sidebar.
+5. Design your base mesh.
+6. Define anchors as **Vertex Groups**.
+7. Select the base mesh using the FoldingVault II eyedropper tool.
+8. Adjust parameters and explore form-finding results.
+
+## Citation
+If you use or reference this project, please cite:
+
+Yeganegi, M. (2026). *BlenderVault: Compression-only vaulted form-finding tool*.
+
+## How to Cite
+Majid Yeganegi. (2026).  
+*BlenderVault: Compression-only vaulted form-finding tool*.  
+Zenodo. https://doi.org/10.5281/zenodo.18547295
 
 ## Author
 Majid Yeganegi  
 Independent Researcher | Architectural Designer
 
-## Usage:
-1- Download the RhinoVault add-on and save it on your computer (Windows only at the moment)
-Installation: In Blender3D, go to Preferences --> install from disk. 
-Press "N", "Folding Vault II, appears inside the main 3D space.
-Design your base mesh, set "anchors" as "vertex groups".
-Choose the base mesh using the FoldingVault II's eyedropper tool. 
-Play with parameters.
+## Links & Resources
+- 🎓 Google Scholar: - 🎓 Google Scholar: https://scholar.google.com/citations?user=majid yeganegi
+- 📝 Zenodo (DOI): https://doi.org/10.5281/zenodo.18547295
+- 📘 Book – *Skybound Structures*: https://a.co/d/0gkV4E7F
 
-## Citation
-If you use or reference this project, please cite:
-Yeganegi, M. (2026). BlenderVault: Compression-only vaulted form-finding tool.
+---
 
-## How to Cite
-Please cite this work as:
-Majid Yeganegi. (2026). *BlenderVault: Compression-only vaulted form-finding tool*. DOI: https://doi.org/10.5281/zenodo.18547295
-
-##
-This repository supports an ongoing PhD-oriented research trajectory in 
-digital structural design and form-finding.
-
-
+This repository supports an ongoing **PhD-oriented research trajectory** in 
+digital structural design, computational form-finding, and sustainable vaulted systems.
