@@ -1,3 +1,15 @@
+## Table of Contents
+- [Publication](#publication)
+- [Research Motivation](#research-motivation)
+- [Research Context](#research-context)
+- [Method Overview](#method-overview)
+- [Features](#features)
+- [Current Status](#current-status)
+- [Future Research Directions](#future-research-directions)
+- [Usage](#usage)
+- [Citation](#citation)
+- [Author](#author)
+
 # BlenderVault
 
 BlenderVault is a research-oriented design open-source (free) tool inspired by RhinoVAULT, 
@@ -61,6 +73,10 @@ Play with parameters.
 ## Citation
 If you use or reference this project, please cite:
 Yeganegi, M. (2026). BlenderVault: Compression-only vaulted form-finding tool.
+
+## How to Cite
+Please cite this work as:
+Majid Yeganegi. (2026). *BlenderVault: Compression-only vaulted form-finding tool*. DOI: https://doi.org/10.5281/zenodo.18547295
 
 ##
 This repository supports an ongoing PhD-oriented research trajectory in 
