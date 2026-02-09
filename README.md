@@ -58,11 +58,12 @@ Design your base mesh, set "anchors" as "vertex groups".
 Choose the base mesh using the FoldingVault II's eyedropper tool. 
 Play with parameters.
 
+## Citation
+If you use or reference this project, please cite:
+Yeganegi, M. (2026). BlenderVault: Compression-only vaulted form-finding tool.
+
 ##
 This repository supports an ongoing PhD-oriented research trajectory in 
 digital structural design and form-finding.
 
-## Citation
-If you use or reference this project, please cite:
-Yeganegi, M. (2026). BlenderVault: Compression-only vaulted form-finding tool.
 
