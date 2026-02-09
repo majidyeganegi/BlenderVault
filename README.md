@@ -5,8 +5,9 @@ developed to explore compression-only vaulted structures using form-finding
 and triangulation-based methods.
 
 ## Publication:
-https://doi.org/10.5281/zenodo.18547295
-This is part of a broader project to revive arched structures for contemporary/future uses.
+https://doi.org/10.5281/zenodo.18547295 (article)
+
+This project is part of a broader project to revive arched structures for contemporary/future uses.
 Please have a look at my book: Skybound Structures: https://a.co/d/0gkV4E7F
 
 ## Research Motivation
