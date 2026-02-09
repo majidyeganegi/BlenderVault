@@ -54,9 +54,13 @@ Independent Researcher | Architectural Designer
 1- Download the RhinoVault add-on and save it on your computer (Windows only at the moment)
 Installation: In Blender3D, go to Preferences --> install from disk. 
 Press "N", "Folding Vault II, appears inside the main 3D space.
-Design your base mesh, set "anchors" as "vertext groups".
-Chose the base mesh unsing the eyedropper tool of the FoldingVault II. 
+Design your base mesh, set "anchors" as "vertex groups".
+Choose the base mesh using the FoldingVault II's eyedropper tool. 
 Play with parameters.
+
+##
+This repository supports an ongoing PhD-oriented research trajectory in 
+digital structural design and form-finding.
 
 ## Citation
 If you use or reference this project, please cite:
