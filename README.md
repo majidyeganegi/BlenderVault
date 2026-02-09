@@ -4,6 +4,11 @@ BlenderVault is a research-oriented design open-source (free) tool inspired by R
 developed to explore compression-only vaulted structures using form-finding 
 and triangulation-based methods.
 
+## Publicatiob:
+https://doi.org/10.5281/zenodo.18547295
+This is part of a broader project to revive arched structures for contemporary/future uses.
+Please have a look at my book: Skybound Structures: https://a.co/d/0gkV4E7F
+
 ## Research Motivation
 This project explores compression-only vaulted structures as a sustainable 
 alternative to material-intensive construction systems, with applications 
