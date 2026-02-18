@@ -80,7 +80,7 @@ Prototype / ongoing research project (initiated in 2022).
 ## Citation
 If you use or reference this project, please cite:
 
-Yeganegi, M. (2026). *BlenderVault: Compression-only vaulted form-finding tool*.
+Yeganegi, M. (2025). *BlenderVault: Compression-only vaulted form-finding tool*.
 
 ## How to Cite
 Majid Yeganegi. (2026).  
