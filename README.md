@@ -64,6 +64,7 @@ Prototype / ongoing research project (initiated in 2022).
 
 ## Version History
 First release: BlenderVault_Addon.py is the initial release.
+
 098b: (same as FoldingVault098B): Updated on 23 Feb 2026. The working process is the same as the previous version, while an optional "stiffness" option is added. You may assign stiffness to parts of the mesh via "vertex paint" in Blender.
 ## Future Research Directions
 - Integration of structural analysis and feedback
