@@ -1,11 +1,10 @@
-# Quad subdivision added
-# Keeping anchor points fixed
+# I have tried to keep the code clean and descriptive
 # Stiffness feature added to edges - via vertex group could be added.
 # ============================================================
 bl_info = {
     "name": "BlenderVaults (08 Core + Stiffness Group)",
-    "author": "Majid Yeganegi + AI Partner",
-    "version": (0, 8, 7),
+    "author": "Majid Yeganegi + AI Partner for faster iteration",
+    "version": (0, 8, 10),
     "blender": (5, 0, 0),
     "location": "View3D > Sidebar > Folding Vaults",
     "description": "Fast TNA Form-finding with Regularized Topology, Advanced Smoothing, and Stiffness Weight Propagation.",
@@ -59,7 +58,7 @@ def cg_solve(A_sparse, b, x0=None, max_iter=500, tol=1e-5):
     for i in range(max_iter):
         Ap = A_sparse.dot(p)
         p_Ap = np.dot(p, Ap)
-        if abs(p_Ap) < 1e-12:  # FIX: Safety check against floating-point zero-division
+        if abs(p_Ap) < 1e-12:
             break 
         alpha = rsold / p_Ap
         x += alpha * p
@@ -78,7 +77,7 @@ def cg_solve(A_sparse, b, x0=None, max_iter=500, tol=1e-5):
 class VaultSubdivider:
     
     @staticmethod
-    def subdivide_quad_fan(bm, anchor_indices, source_obj, stiff_group_name):
+    def subdivide_quad_fan(bm, anchor_indices, source_obj, stiff_group_name, include_edge_subd=True):
         new_bm = bmesh.new()
         old_v_to_new = {}
         bm.verts.ensure_lookup_table()
@@ -87,7 +86,6 @@ class VaultSubdivider:
         all_anchors_new_bm = set() 
         just_created_anchors = set()
 
-        # Handle weight layer propagation setups
         src_d_layer = bm.verts.layers.deform.active
         dst_d_layer = new_bm.verts.layers.deform.new()
         
@@ -105,7 +103,7 @@ class VaultSubdivider:
             if val > 0:
                 nv[dst_d_layer][stiff_gid] = val
 
-        # Copy existing vertices and their weights
+        # Copy existing vertices and weights
         for v in bm.verts:
             nv = new_bm.verts.new(v.co)
             old_v_to_new[v.index] = nv
@@ -128,7 +126,8 @@ class VaultSubdivider:
             set_w(mid_vert, avg_w)
             edge_mid_map[key] = mid_vert
             
-            if v1_i in input_anchor_set and v2_i in input_anchor_set:
+            # If enabled, propagate anchor status to edge midpoint if both endpoints are anchors
+            if include_edge_subd and (v1_i in input_anchor_set and v2_i in input_anchor_set):
                 all_anchors_new_bm.add(mid_vert)
                 just_created_anchors.add(mid_vert)
 
@@ -348,6 +347,8 @@ class VaultEngine:
 
     @staticmethod
     def solve_tna_sparse(bm, props, anchors, source_obj):
+        bm.verts.ensure_lookup_table()
+        bm.edges.ensure_lookup_table()
         verts = bm.verts
         n = len(verts)
         if n == 0: return
@@ -358,14 +359,12 @@ class VaultEngine:
         # --- ANCHOR SETUP ---
         anchor_set = set(anchors)
         
-        # For RhinoVault behavior: Option to pin boundary positions during horizontal relaxation
         horizontal_anchor_set = anchor_set.copy()
         if props.pin_boundaries:
             for v in verts:
                 if v.is_boundary:
                     horizontal_anchor_set.add(v.index)
         
-        # --- SETUP FREE MAPS FOR HORIZONTAL SOLVER ---
         free_map_h = []
         global_to_free_h = {}
         free_count_h = 0
@@ -375,7 +374,6 @@ class VaultEngine:
                 global_to_free_h[i] = free_count_h
                 free_count_h += 1
                 
-        # --- SETUP FREE MAPS FOR VERTICAL Z SOLVER ---
         free_map_z = []
         global_to_free_z = {}
         free_count_z = 0
@@ -396,7 +394,6 @@ class VaultEngine:
             u, v = v_indices[e.verts[0]], v_indices[e.verts[1]]
             edges_idx.append((u, v))
         
-        # --- STIFFNESS PROPERTY EVALUATION ---
         q = np.full(len(edges_idx), q_internal)
         if props.stiff_group:
             grp = source_obj.vertex_groups.get(props.stiff_group)
@@ -411,7 +408,6 @@ class VaultEngine:
                 
                 for idx, (u, v) in enumerate(edges_idx):
                     avg_w = (v_weights[u] + v_weights[v]) * 0.5
-                    # IMPROVEMENT: Use UI controlled stiffness multiplier property
                     q[idx] = q_internal * (1.0 + (avg_w * props.stiffness_multiplier))
 
         # ============================================================
@@ -541,6 +537,8 @@ class VaultEngine:
     def process(obj, props):
         bm = bmesh.new()
         bm.from_mesh(obj.data)
+        bm.verts.ensure_lookup_table()
+        bm.edges.ensure_lookup_table()
         
         anchor_data = {}
 
@@ -576,7 +574,7 @@ class VaultEngine:
                 if props.subdivide_mode == 'QUAD':
                     for lvl in range(1, props.subdiv_level + 1):
                         bm_next, all_anchors_set, new_anchors_set = VaultSubdivider.subdivide_quad_fan(
-                            bm, current_anchors, obj, props.stiff_group
+                            bm, current_anchors, obj, props.stiff_group, props.include_edge_subd_anchors
                         )
                         anchor_data[lvl] = list(new_anchors_set)
                         bm.free()
@@ -586,15 +584,63 @@ class VaultEngine:
                     final_anchors = list(current_anchors)
 
                 else:
-                    bmesh.ops.subdivide_edges(bm, edges=bm.edges, cuts=props.subdiv_level, use_grid_fill=True)
-                    if props.use_triangles:
-                        bmesh.ops.triangulate(bm, faces=bm.faces)
+                    anchor_coords = [bm.verts[idx].co.copy() for idx in current_anchors if idx < len(bm.verts)]
                     
-                    final_anchors = VaultEngine.get_anchors_via_proximity(bm, obj, props.anchor_group)
-                    anchor_data[0] = final_anchors 
+                    # Store line segments corresponding to original anchor edges if toggle is ON
+                    anchor_edge_segments = []
+                    if props.include_edge_subd_anchors:
+                        for e in bm.edges:
+                            if e.verts[0].index in current_anchors and e.verts[1].index in current_anchors:
+                                anchor_edge_segments.append((e.verts[0].co.copy(), e.verts[1].co.copy()))
+
+                    bmesh.ops.subdivide_edges(
+                        bm, 
+                        edges=bm.edges[:], 
+                        cuts=props.subdiv_level, 
+                        use_grid_fill=True
+                    )
+                    
+                    if props.use_triangles:
+                        bmesh.ops.triangulate(bm, faces=bm.faces[:])
+
+                    bm.verts.ensure_lookup_table()
+                    
+                    final_anchors = []
+                    if anchor_coords:
+                        kd = KDTree(len(bm.verts))
+                        for i, v in enumerate(bm.verts):
+                            kd.insert(v.co, i)
+                        kd.balance()
+                        
+                        # Pin explicit anchor point vertices
+                        for aco in anchor_coords:
+                            _, v_idx, dist = kd.find(aco)
+                            if dist < 0.05:
+                                final_anchors.append(v_idx)
+
+                        # If toggle is ON, tag intermediate vertices lying along original anchor edges
+                        if props.include_edge_subd_anchors and anchor_edge_segments:
+                            for v in bm.verts:
+                                if v.index in final_anchors:
+                                    continue
+                                for p1, p2 in anchor_edge_segments:
+                                    # Distance from point v.co to line segment (p1, p2)
+                                    seg_vec = p2 - p1
+                                    seg_len_sq = seg_vec.length_squared
+                                    if seg_len_sq < 1e-8:
+                                        continue
+                                    t = max(0.0, min(1.0, (v.co - p1).dot(seg_vec) / seg_len_sq))
+                                    proj = p1 + t * seg_vec
+                                    if (v.co - proj).length < 0.01:
+                                        final_anchors.append(v.index)
+                                        break
+                    else:
+                        final_anchors = [v.index for v in bm.verts if v.is_boundary]
+
+                    anchor_data[0] = final_anchors
             else:
                 if props.use_triangles:
-                    bmesh.ops.triangulate(bm, faces=bm.faces)
+                    bmesh.ops.triangulate(bm, faces=bm.faces[:])
                 final_anchors = initial_anchors
 
         bm.verts.ensure_lookup_table()
@@ -603,8 +649,7 @@ class VaultEngine:
 
         # --- PRE-TNA SMOOTHING ---
         if props.pre_tna_smooth_iters > 0:
-            anchor_verts = {bm.verts[i] for i in final_anchors}
-            # IMMEDIATE FIX: Exclude all boundary vertices so outer edges don't migrate/shrink inwards
+            anchor_verts = {bm.verts[i] for i in final_anchors if i < len(bm.verts)}
             smooth_verts = [v for v in bm.verts if (v not in anchor_verts) and (not v.is_boundary)]
             
             if smooth_verts:
@@ -645,7 +690,6 @@ def run_solver(context):
         res_obj = bpy.data.objects.new(name, mesh)
         context.collection.objects.link(res_obj)
     else:
-        # FIX: Object database link safeguard. If active collection changes, link if not present.
         if res_obj.name not in context.collection.objects:
             context.collection.objects.link(res_obj)
     
@@ -701,7 +745,6 @@ class VaultProperties(bpy.types.PropertyGroup):
     anchor_group: bpy.props.StringProperty(name="Anchor Group", update=update_vault, description="Vertex Group for Supports")
     stiff_group: bpy.props.StringProperty(name="Stiffness Group", update=update_vault, description="Vertex Group for local stiffness distribution")
     
-    # IMPROVEMENT: Exposed weight scale multiplier configuration parameters
     stiffness_multiplier: bpy.props.FloatProperty(name="Stiffness Multiplier", default=9.0, min=0.0, max=100.0, update=update_vault, description="Controls internal force scaling based on vertex weights")
     pin_boundaries: bpy.props.BoolProperty(name="Pin Boundaries (XY)", default=True, update=update_vault, description="Keeps non-anchor perimeter boundary vertices locked in X/Y plane during relaxation")
     
@@ -721,6 +764,12 @@ class VaultProperties(bpy.types.PropertyGroup):
     )
     subdiv_level: bpy.props.IntProperty(name="Subdivision", default=1, min=0, max=6, update=update_vault)
     use_triangles: bpy.props.BoolProperty(name="Triangulate", default=True, update=update_vault)
+    include_edge_subd_anchors: bpy.props.BoolProperty(
+        name="Include Edge Subdivisions", 
+        default=True, 
+        update=update_vault, 
+        description="Include newly created vertices along anchor edges as fixed anchors after subdivision"
+    )
     
     do_horizontal_relax: bpy.props.BoolProperty(name="Horizontal Relax", default=True, update=update_vault)
     force_density_user: bpy.props.FloatProperty(name="Force Density", default=1.0, min=0.01, update=update_vault)
@@ -731,7 +780,7 @@ class VaultProperties(bpy.types.PropertyGroup):
     auto_update: bpy.props.BoolProperty(name="Interactive", default=False)
 
 class VAULT_PT_Main(bpy.types.Panel):
-    bl_label = "Folding Vaults (TNA Solver v08-Stiff)"
+    bl_label = "Folding Vaults (TNA Solver v081-Stiff)"
     bl_idname = "VAULT_PT_Main"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -759,6 +808,7 @@ class VAULT_PT_Main(bpy.types.Panel):
         else:
             box.prop(props, "subdiv_level")
             box.prop(props, "subdivide_mode")
+            box.prop(props, "include_edge_subd_anchors")
             if props.subdivide_mode == 'TRI':
                 box.prop(props, "use_triangles")
             box.prop(props, "pre_tna_smooth_iters")
