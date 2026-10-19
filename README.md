@@ -100,7 +100,7 @@ Independent Researcher | Architectural Designer
 - 🎓 Google Scholar: - 🎓 Google Scholar: https://scholar.google.com/citations?user=majid yeganegi
 - 📝 Zenodo (DOI): https://doi.org/10.5281/zenodo.18547295
 - 📘 Book – *Skybound Structures*: https://a.co/d/0gkV4E7F
-- Video demonstration on LinkedIn: [https://lnkd.in/p/eXiAfbBt](https://lnkd.in/p/ex6ecSUA)
+- Video demonstration on YouTube: https://www.youtube.com/watch?v=qYQaAetNQM4
 
 ---
 
